@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Romantis - Versi Esai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe0f0;
+            margin: 0;
+            padding: 20px;
+            color: #d5006d;
+        }
+        h1 {
+            text-align: center;
+            color: #c51162;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #d5006d;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .question {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 15px;
+            border: 1px solid #d5006d;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        button {
+            background-color: #d5006d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #c51162;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .copy-button {
+            margin-top: 20px;
+            background-color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kuis Romantis - Versi Esai</h1>
+    <div class="quiz-container">
+        <div class="question" id="question"></div>
+        <textarea id="answer" placeholder="Tulis jawaban kamu di sini..."></textarea>
+        <button onclick="submitAnswer()">Kirim Jawaban</button>
+        <div class="result" id="result"></div>
+        <button class="copy-button" id="copyButton" onclick="copyResults()" style="display:none;">Salin Hasil</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Apa yang paling kamu cintai dari pasanganmu?",
+                correctAnswer: "Senyum mereka"
+            },
+            {
+                question: "Bagaimana cara kamu menunjukkan kasih sayangmu?",
+                correctAnswer: "Memberi kejutan"
+            },
+            {
+                question: "Apa kenangan terindah yang kamu miliki bersama pasanganmu?",
+                correctAnswer: "Liburan bersama"
+            },
+            {
+                question: "Apa harapanmu untuk hubungan kalian di masa depan?",
+                correctAnswer: "Selalu saling mendukung"
+            }
+        ];
+
+        let currentQuestion = 0;
+        const answers = [];
+        const results = [];
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const answerElement = document.getElementById('answer');
+            const resultElement = document.getElementById('result');
+
+            if (currentQuestion < questions.length) {
+                questionElement.innerText = questions[currentQuestion].question;
+                answerElement.value = '';
+                resultElement.innerText = '';
+            } else {
+                showResults();
+            }
+        }
+
+        function submitAnswer() {
+            const answerElement = document.getElementById('answer');
+            const userAnswer = answerElement.value.trim();
+            answers.push(userAnswer);
+
+            // Cek jawaban
+            const correctAnswer = questions[currentQuestion].correctAnswer;
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                results.push("Benar! 🎉");
+            } else {
+                results.push(`Salah! Jawaban yang benar: "${correctAnswer}".`);
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            const questionElement = document.getElementById('question');
+            const answerElement = document.getElementById('answer');
+            const resultElement = document.getElementById('result');
+            const copyButton = document.getElementById('copyButton');
+
+            questionElement.innerText = "Hasil Jawabanmu:";
+            answerElement.style.display = 'none';
+
+            let resultText = '';
+            questions.forEach((q, index) => {
+                resultText += `Pertanyaan: ${q.question}<br>Jawaban: ${answers[index]}<br>Hasil: ${results[index]}<br><br>`;
+            });
+
+            resultElement.innerHTML = resultText;
+            copyButton.style.display = 'block'; // Tampilkan tombol salin
+        }
+
+        function copyResults() {
+            const resultText = document.getElementById('result').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert("Hasil kuis telah disalin ke clipboard!"); // Pesan konfirmasi
+            }, (err) => {
+                console.error("Gagal menyalin: ", err);
+            });
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
